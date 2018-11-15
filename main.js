@@ -33,7 +33,7 @@ function loadAndAdd(url, collectedTrees) {
           }
         : trees;
       if (trees.next) {
-        loadAndAdd(trees.next, nextTrees);
+        loadAndAdd(trees.next.replace('http://', 'https://'), nextTrees);
       } else {
         counter.innerText = nextTrees.features.length;
         map.addLayer({
