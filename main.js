@@ -23,7 +23,7 @@ function loadAndAdd(url, collectedTrees) {
     .then(resp => resp.json())
     .then(trees => {
       if (trees.count > 5000) {
-        console.warn('Too many trees, aborting load');
+        console.warn(`Too many trees (${trees.count}), aborting load`);
         return;
       }
       const nextTrees = collectedTrees
