@@ -10,6 +10,48 @@ const map = new mapboxgl.Map({
   zoom: 11,
 });
 
+// When a click event occurs on a feature in the places layer, open a popup at the
+// location of the feature, with description HTML from its properties.
+map.on('click', 'trees', function (e) {
+  var coordinates = e.features[0].geometry.coordinates.slice();
+  const properties = e.features[0].properties;
+  const keys = Object.keys(properties);
+  const rows = keys.map(key => {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.innerText = key;
+    const td = document.createElement('td');
+    td.innerText = properties[key]
+    tr.appendChild(th);
+    tr.appendChild(td);
+    return tr;
+  });
+  const table = document.createElement('table');
+  rows.forEach(row => table.appendChild(row));
+
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+
+  new mapboxgl.Popup()
+    .setLngLat(coordinates)
+    .setDOMContent(table)
+    .addTo(map);
+});
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'trees', function () {
+  map.getCanvas().style.cursor = 'pointer';
+});
+
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'trees', function () {
+  map.getCanvas().style.cursor = '';
+});
+
 const counter = document.createElement('div');
 counter.style.position = 'absolute';
 counter.style.top = 0;
