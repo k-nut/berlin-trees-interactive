@@ -90,7 +90,7 @@ function loadAndAdd(url, collectedTrees) {
     });
 }
 
-const addGenusFilter = names => {
+const addGenusFilter = (names, callback, offsetTop) => {
   const input = document.createElement("select");
   const options = names.map(tree => {
     const option = document.createElement("option");
@@ -101,19 +101,19 @@ const addGenusFilter = names => {
 
   options.forEach(option => input.appendChild(option));
   input.style.position = "absolute";
-  input.style.top = 0;
+  input.style.top = offsetTop;
   input.style.right = 0;
   document.body.appendChild(input);
-  input.onchange = event => filterGenus(event.target.value);
+  input.onchange = callback;
 };
 
-const genusData = require('./data/genus.json');
-addGenusFilter(genusData);
+const genusData = require("./data/genus.json");
+addGenusFilter(genusData, event => filterStringColumn("genus", event.target.value), 0);
 
-const filterGenus = name => {
+const filterStringColumn = (column, name) => {
   if (map.getLayer("trees")) map.removeLayer("trees");
   if (map.getSource("trees")) map.removeSource("trees");
   loadAndAdd(
-    `https://trees.codefor.de/api/v2/trees/?page_size=1000&genus__iexact=${name}`
+    `https://trees.codefor.de/api/v2/trees/?page_size=1000&${column}__iexact=${name}`
   );
 };
