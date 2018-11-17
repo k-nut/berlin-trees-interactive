@@ -90,10 +90,10 @@ function loadAndAdd(url, collectedTrees) {
     });
 }
 
-const addGenusFilter = () => {
   const input = document.createElement('select');
-  const options = ['BUXUS', 'CALOCEDRUS', 'CARAGANA', 'Prunus'].map(tree => {
     const option = document.createElement('option');
+const addGenusFilter = names => {
+  const options = names.map(tree => {
     option.innerText = tree;
     option.value = tree;
     return option;
@@ -107,12 +107,13 @@ const addGenusFilter = () => {
   input.onchange = event => filterGenus(event.target.value);
 };
 
-addGenusFilter();
+const genusData = require('./data/genus.json');
+addGenusFilter(genusData);
 
 const filterGenus = name => {
   if (map.getLayer('trees')) map.removeLayer('trees');
   if (map.getSource('trees')) map.removeSource('trees');
   loadAndAdd(
-    `https://trees.codefor.de/api/v2/trees/?page_size=1000&genus=${name}`
+    `https://trees.codefor.de/api/v2/trees/?page_size=1000&genus__iexact=${name}`
   );
 };
