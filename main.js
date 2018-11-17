@@ -110,6 +110,9 @@ const addGenusFilter = (names, callback, offsetTop) => {
 const genusData = require("./data/genus.json");
 addGenusFilter(genusData, event => filterStringColumn("genus", event.target.value), 0);
 
+const speciesData = require("./data/species.json");
+addGenusFilter(speciesData, event => filterStringColumn("species", event.target.value), 50);
+
 const filterStringColumn = (column, name) => {
   if (map.getLayer("trees")) map.removeLayer("trees");
   if (map.getSource("trees")) map.removeSource("trees");
