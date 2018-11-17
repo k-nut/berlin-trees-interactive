@@ -1,32 +1,32 @@
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
 
 const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v9',
+  container: "map",
+  style: "mapbox://styles/mapbox/streets-v9",
   center: [13.38, 52.49],
-  zoom: 11,
+  zoom: 11
 });
 
 // When a click event occurs on a feature in the places layer, open a popup at the
 // location of the feature, with description HTML from its properties.
-map.on('click', 'trees', function (e) {
+map.on("click", "trees", function(e) {
   var coordinates = e.features[0].geometry.coordinates.slice();
   const properties = e.features[0].properties;
   const keys = Object.keys(properties);
   const rows = keys.map(key => {
-    const tr = document.createElement('tr');
-    const th = document.createElement('th');
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
     th.innerText = key;
-    const td = document.createElement('td');
-    td.innerText = properties[key]
+    const td = document.createElement("td");
+    td.innerText = properties[key];
     tr.appendChild(th);
     tr.appendChild(td);
     return tr;
   });
-  const table = document.createElement('table');
+  const table = document.createElement("table");
   rows.forEach(row => table.appendChild(row));
 
   // Ensure that if the map is zoomed out such that multiple
@@ -43,21 +43,21 @@ map.on('click', 'trees', function (e) {
 });
 
 // Change the cursor to a pointer when the mouse is over the places layer.
-map.on('mouseenter', 'trees', function () {
-  map.getCanvas().style.cursor = 'pointer';
+map.on("mouseenter", "trees", function() {
+  map.getCanvas().style.cursor = "pointer";
 });
 
 // Change it back to a pointer when it leaves.
-map.on('mouseleave', 'trees', function () {
-  map.getCanvas().style.cursor = '';
+map.on("mouseleave", "trees", function() {
+  map.getCanvas().style.cursor = "";
 });
 
-const counter = document.createElement('div');
-counter.style.position = 'absolute';
+const counter = document.createElement("div");
+counter.style.position = "absolute";
 counter.style.top = 0;
 counter.style.left = 0;
-counter.style.padding = '10px';
-counter.style.backgrounrd = 'white';
+counter.style.padding = "10px";
+counter.style.backgrounrd = "white";
 document.body.appendChild(counter);
 
 function loadAndAdd(url, collectedTrees) {
@@ -71,7 +71,7 @@ function loadAndAdd(url, collectedTrees) {
       const nextTrees = collectedTrees
         ? {
             ...collectedTrees,
-            features: [...collectedTrees.features, ...trees.features],
+            features: [...collectedTrees.features, ...trees.features]
           }
         : trees;
       if (trees.next) {
@@ -79,28 +79,28 @@ function loadAndAdd(url, collectedTrees) {
       } else {
         counter.innerText = nextTrees.features.length;
         map.addLayer({
-          id: 'trees',
-          type: 'circle',
+          id: "trees",
+          type: "circle",
           source: {
-            type: 'geojson',
-            data: nextTrees,
-          },
+            type: "geojson",
+            data: nextTrees
+          }
         });
       }
     });
 }
 
-  const input = document.createElement('select');
-    const option = document.createElement('option');
 const addGenusFilter = names => {
+  const input = document.createElement("select");
   const options = names.map(tree => {
+    const option = document.createElement("option");
     option.innerText = tree;
     option.value = tree;
     return option;
   });
 
   options.forEach(option => input.appendChild(option));
-  input.style.position = 'absolute';
+  input.style.position = "absolute";
   input.style.top = 0;
   input.style.right = 0;
   document.body.appendChild(input);
@@ -111,8 +111,8 @@ const genusData = require('./data/genus.json');
 addGenusFilter(genusData);
 
 const filterGenus = name => {
-  if (map.getLayer('trees')) map.removeLayer('trees');
-  if (map.getSource('trees')) map.removeSource('trees');
+  if (map.getLayer("trees")) map.removeLayer("trees");
+  if (map.getSource("trees")) map.removeSource("trees");
   loadAndAdd(
     `https://trees.codefor.de/api/v2/trees/?page_size=1000&genus__iexact=${name}`
   );
