@@ -57,7 +57,7 @@ counter.style.position = "absolute";
 counter.style.top = 0;
 counter.style.left = 0;
 counter.style.padding = "10px";
-counter.style.backgrounrd = "white";
+counter.style.background = "white";
 document.body.appendChild(counter);
 
 function loadAndAdd(url, collectedTrees) {
