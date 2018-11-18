@@ -65,7 +65,7 @@ function loadAndAdd(url, collectedTrees) {
     .then(resp => resp.json())
     .then(trees => {
       if (trees.count > 5000) {
-        console.warn(`Too many trees (${trees.count}), aborting load`);
+	counter.innerText = `⚠️  zu viele 🌳 (${trees.count})`
         return;
       }
       const nextTrees = collectedTrees
@@ -77,7 +77,7 @@ function loadAndAdd(url, collectedTrees) {
       if (trees.next) {
         loadAndAdd(trees.next, nextTrees);
       } else {
-        counter.innerText = nextTrees.features.length;
+        counter.innerText = `${nextTrees.features.length} 🌳 geladen`;
         map.addLayer({
           id: "trees",
           type: "circle",
