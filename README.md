@@ -1,5 +1,8 @@
 # Trees Visualizer
 
+[Map at berlin-trees.netlify.com](https://berlin-trees.netlify.com/), use the filter at the top right to show data.
+
+
 ## Install
 ```
 yarn install
